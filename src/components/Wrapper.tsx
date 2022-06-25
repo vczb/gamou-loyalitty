@@ -1,5 +1,6 @@
 import { HTMLAttributes, ReactNode } from "react";
 import { Box } from "@mui/system";
+import MotionTransition from "./MotionTransition";
 
 type HTMLDIVElementTypes = HTMLAttributes<HTMLDivElement>;
 
@@ -16,18 +17,20 @@ const Wrapper = ({
   ...props
 }: WrapperTypes) => {
   return (
-    <Box
-      component="main"
-      sx={{
-        width: "100%",
-        height: fullVH ? "100vh" : "100%",
-        overflowX: "hidden",
-        backgroundColor: bgColor,
-      }}
-      {...props}
-    >
-      {children}
-    </Box>
+    <MotionTransition>
+      <Box
+        component="main"
+        sx={{
+          width: "100%",
+          height: fullVH ? "100vh" : "100%",
+          overflowX: "hidden",
+          backgroundColor: bgColor,
+        }}
+        {...props}
+      >
+        {children}
+      </Box>
+    </MotionTransition>
   );
 };
 

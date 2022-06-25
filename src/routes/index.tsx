@@ -11,39 +11,48 @@ import Edit from "features/customer/Edit";
 import Diamonds from "features/transaction/Diamonds";
 import Wallet from "features/transaction/Wallet";
 import List from "features/product/List";
+import { AnimatePresence } from "framer-motion";
 
 export default function AppRoutes() {
   const { company } = useCompany();
   const { customer } = useCustomer();
   return (
     <BrowserRouter>
-      <Routes>
-        <Route element={<Protected isAllowed={!!company.jwt?.length} />}>
-          <Route path="/" element={<Onboarding />} />
-          <Route
-            element={
-              <Protected isAllowed={!!customer.cpf?.length} redirectTo={"/"} />
-            }
-          >
-            <Route path="/customer/new" element={<Register />} />
-            <Route path="/customer/welcome" element={<Welcome />} />
+      <AnimatePresence exitBeforeEnter>
+        <Routes location={location} key={location.pathname}>
+          <Route element={<Protected isAllowed={!!company.jwt?.length} />}>
+            <Route path="/" element={<Onboarding />} />
             <Route
               element={
-                <Protected isAllowed={!!customer.id?.length} redirectTo={"/"} />
+                <Protected
+                  isAllowed={!!customer.cpf?.length}
+                  redirectTo={"/"}
+                />
               }
             >
-              <Route path="/customer/edit" element={<Edit />} />
+              <Route path="/customer/new" element={<Register />} />
+              <Route path="/customer/welcome" element={<Welcome />} />
+              <Route
+                element={
+                  <Protected
+                    isAllowed={!!customer.id?.length}
+                    redirectTo={"/"}
+                  />
+                }
+              >
+                <Route path="/customer/edit" element={<Edit />} />
 
-              <Route path="/transaction/diamonds" element={<Diamonds />} />
-              <Route path="/transaction/wallet" element={<Wallet />} />
+                <Route path="/transaction/diamonds" element={<Diamonds />} />
+                <Route path="/transaction/wallet" element={<Wallet />} />
 
-              <Route path="/product/list" element={<List />} />
+                <Route path="/product/list" element={<List />} />
+              </Route>
             </Route>
           </Route>
-        </Route>
 
-        <Route path="/auth" element={<Auth />} />
-      </Routes>
+          <Route path="/auth" element={<Auth />} />
+        </Routes>
+      </AnimatePresence>
     </BrowserRouter>
   );
 }
